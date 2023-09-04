@@ -1,3 +1,23 @@
+<script setup>
+import useFetchCar from '../../composables/useFetchCar'
+
+const route = useRoute()
+// const user = useSupabaseUser()
+const { toTitleCase } = useUtilities()
+const { data, car } = await useFetchCar(route.params.id)
+
+useHead({
+  title: toTitleCase(route.params.name),
+})
+
+definePageMeta({
+  layout: 'custom'
+})
+
+definePageMeta({
+  layout: 'custom',
+})
+</script>
 <template>
   <div>
     <CarDetailHero :car="car"/>
@@ -6,33 +26,3 @@
     <CarDetailContact/>
   </div>
 </template>
-
-<script setup>
-import { useUtilities } from '../../composables/useUtilities'
-import { useCars } from '../../composables/useCars'
-
-const route = useRoute();
-const {toTitleCase} = useUtilities();
-const {cars} = useCars();
-
-const car = computed(()=>{
-  return cars.find((c)=>{
-    return c.id === parseInt(route.params.id);
-  })
-})
-if (!car.value){
-  throw createError({
-    statusCode : 404,
-    message: `Car with ID of ${route.params.id} doesn't exist`
-  })
-}
-useHead({
-  title: toTitleCase(route.params.name)
-})
-
-definePageMeta({
-  layout: 'custom',
-})
-
-
-</script>
